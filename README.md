@@ -1,3 +1,9 @@
+🌐 Live Demo
+🚀 Try PuzzleCam: https://truptis-tech.github.io/PuzzleCam/
+
+📌 Project Status
+The frontend is deployed using GitHub Pages and is available to try online.
+
 PuzzleCam 🧩📸
 
 PuzzleCam is a beginner-friendly frontend mini-project focused on interactive puzzle solving. It explores how camera-based puzzle capture and automated solving can make puzzles more engaging.
