@@ -1,0 +1,601 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Segoe UI, sans-serif;
+}
+
+body {
+    background: #0b1020;
+    color: white;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 520px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 2rem;
+}
+
+.camera-container {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    margin-bottom: 20px;
+    border: 2px solid #2c4cff;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #121a33;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+video,
+#previewImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#previewImage {
+    display: none;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.controls button,
+.upload-btn {
+    padding: 14px 22px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg,
+            #4a72ff,
+            #67b6ff);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.controls button:hover,
+.upload-btn:hover {
+    transform: translateY(-2px);
+}
+
+.upload-btn input {
+    display: none;
+}
+
+.settings-card {
+    background: #131d3c;
+    padding: 25px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, .08);
+}
+
+.settings-card h3 {
+    margin-bottom: 15px;
+}
+
+.grid-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.grid-btn {
+    background: #1b2950;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    color: white;
+    padding: 18px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s, background 0.2s;
+    position: relative;
+}
+
+.grid-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    background: #223170;
+}
+
+.grid-btn span {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    opacity: .8;
+}
+
+.grid-btn.active {
+    border-color: #5a8fff;
+    box-shadow: 0 0 20px rgba(90, 143, 255, .5);
+}
+
+/* Progress dot – shown when that difficulty has saved progress */
+.grid-btn[data-has-progress]::after {
+    content: '';
+    position: absolute;
+    top: 7px;
+    right: 9px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #38e89a;
+    box-shadow: 0 0 6px #38e89a;
+    animation: progress-pulse 2s ease-in-out infinite;
+}
+
+@keyframes progress-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.55; transform: scale(1.4); }
+}
+
+.options {
+    display: flex;
+    gap: 30px;
+}
+
+.option-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.option-item input {
+    width: 18px;
+    height: 18px;
+}
+
+.start-btn {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 18px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    background: linear-gradient(135deg,
+            #4f79ff,
+            #68c7ff);
+    margin-bottom: 25px;
+}
+
+.start-btn:hover {
+    opacity: .9;
+    transform: translateY(-2px);
+}
+
+.auto-solve-btn {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 18px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    background: linear-gradient(135deg, #7c3aed, #06b6d4);
+    margin-bottom: 25px;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.auto-solve-btn:hover:not(:disabled) {
+    opacity: .9;
+    transform: translateY(-2px);
+}
+
+.auto-solve-btn:disabled {
+    background: #1b2950;
+    color: rgba(255, 255, 255, 0.35);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.auto-solve-btn.solving {
+    background: linear-gradient(135deg, #ef4444, #f43f5e);
+}
+
+.stats {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-box {
+    flex: 1;
+    background: #131d3c;
+    padding: 15px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.puzzle-board {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #131d3c;
+    gap: 2px;
+    overflow: hidden;
+    opacity: 1;
+    transition: opacity 0.18s ease;
+}
+
+.puzzle-piece {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, .15);
+    cursor: grab;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.puzzle-piece:active {
+    cursor: grabbing;
+    transform: scale(0.98);
+}
+
+.camera-select-container {
+    display: inline-block;
+}
+
+.camera-select {
+    padding: 14px 40px 14px 22px;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background: #1b2950;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+}
+
+.camera-select:hover {
+    border-color: #4a72ff;
+    background-color: #213262;
+    transform: translateY(-2px);
+}
+
+.score-card {
+    background: #131d3c;
+    border-radius: 20px;
+    padding: 25px;
+}
+
+.score-card h3 {
+    margin-bottom: 20px;
+}
+
+.score-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.score-item {
+    background: #1b2950;
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.score-item h4 {
+    margin-bottom: 8px;
+}
+
+.score-item p {
+    color: #b7c8ff;
+}
+
+@media(max-width:768px) {
+
+    .grid-buttons {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .score-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats {
+        flex-direction: column;
+    }
+
+    .options {
+        flex-direction: column;
+    }
+
+}
+
+/* ========================
+   RESULT MODAL
+======================== */
+
+.result-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 10, 30, 0.75);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.result-modal.show {
+    display: flex;
+    animation: fadeInModal 0.35s ease;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+.result-card {
+    background: linear-gradient(145deg, #131d3c, #1b2a55);
+    border: 1px solid rgba(90, 143, 255, 0.35);
+    border-radius: 28px;
+    padding: 40px 36px 32px;
+    width: min(90vw, 400px);
+    text-align: center;
+    box-shadow: 0 0 60px rgba(74, 114, 255, 0.25);
+}
+
+.result-confetti {
+    font-size: 56px;
+    margin-bottom: 12px;
+    animation: spin 1s ease-in-out;
+}
+
+@keyframes spin {
+    0%   { transform: rotate(-20deg) scale(0.6); }
+    60%  { transform: rotate(15deg)  scale(1.2); }
+    100% { transform: rotate(0deg)   scale(1);   }
+}
+
+.result-title {
+    font-size: 1.9rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, #6ea8ff, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 6px;
+}
+
+.result-sub {
+    color: rgba(255,255,255,0.55);
+    font-size: 0.9rem;
+    margin-bottom: 28px;
+}
+
+.result-stats {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.result-stat {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 14px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.result-label {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.result-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #7eb8ff;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.modal-btn {
+    flex: 1;
+    padding: 14px 10px;
+    border: none;
+    border-radius: 14px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.replay-btn {
+    background: linear-gradient(135deg, #4f79ff, #a78bfa);
+    box-shadow: 0 4px 15px rgba(79, 121, 255, 0.3);
+}
+
+.continue-btn {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.modal-btn:hover {
+    transform: translateY(-2px);
+}
+
+.replay-btn:hover {
+    box-shadow: 0 6px 20px rgba(79, 121, 255, 0.5);
+}
+
+.continue-btn:hover {
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+}
+
+/* ========================
+   SLIDING PUZZLE INTERACTION & CONTROLS
+======================== */
+
+.puzzle-controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    background: #131d3c;
+    padding: 14px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    width: 100%;
+}
+
+.puzzle-control-btn {
+    flex: 1;
+    padding: 12px 14px;
+    border: none;
+    border-radius: 10px;
+    background: #1b2950;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.puzzle-control-btn:hover:not(:disabled) {
+    background: #233566;
+    transform: translateY(-1px);
+}
+
+.puzzle-control-btn:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.puzzle-control-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+#solveBtn {
+    background: linear-gradient(135deg, #4f79ff, #a78bfa);
+    font-weight: 700;
+}
+
+#solveBtn:hover:not(:disabled) {
+    box-shadow: 0 4px 15px rgba(79, 121, 255, 0.3);
+}
+
+#solveBtn.solving {
+    background: linear-gradient(135deg, #ef4444, #f43f5e);
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.puzzle-piece {
+    cursor: grab;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.puzzle-piece:active {
+    cursor: grabbing;
+}
+
+.puzzle-piece:hover {
+    transform: scale(0.98);
+    box-shadow: 0 0 12px rgba(79, 121, 255, 0.4);
+    filter: brightness(1.05);
+}
+
+.puzzle-piece.hint-flash {
+    animation: hint-glow 0.4s ease-in-out 3;
+    border: 3px solid #ffde59 !important;
+    box-shadow: 0 0 25px #ffde59, inset 0 0 10px #ffde59;
+    z-index: 10;
+}
+
+@keyframes hint-glow {
+    0%, 100% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(0.95); filter: brightness(1.3); }
+}
+
+/* ── Robotic Solver Swap Highlights ─────────────────────── */
+.puzzle-piece.piece-glow-a {
+    border: 2px solid #00f0ff !important;
+    box-shadow: 0 0 18px #00f0ff, inset 0 0 8px rgba(0, 240, 255, 0.4) !important;
+    position: relative;
+    z-index: 20;
+}
+
+.puzzle-piece.piece-glow-b {
+    border: 2px solid #d946ef !important;
+    box-shadow: 0 0 18px #d946ef, inset 0 0 8px rgba(217, 70, 239, 0.4) !important;
+    position: relative;
+    z-index: 20;
+}
+
+/* ========================
+   TOAST NOTIFICATION
+   ======================== */
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    transform: translateX(-50%) translateY(100%);
+    background: linear-gradient(135deg, rgba(20,25,40,0.98), rgba(40,50,80,0.98));
+    color: #e6f0ff;
+    padding: 12px 18px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+    opacity: 0;
+    transition: transform 260ms cubic-bezier(.2,.9,.2,1), opacity 260ms ease;
+    z-index: 1200;
+    font-weight: 700;
+    pointer-events: none;
+}
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}

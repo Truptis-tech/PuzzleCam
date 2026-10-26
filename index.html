@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puzzle Cam</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>🧩 Puzzle Cam</h1>
+
+        <!-- Camera Preview + Puzzle Board (shared box) -->
+        <div class="camera-container">
+            <video id="video" autoplay playsinline></video>
+            <canvas id="canvas" style="display:none;"></canvas>
+            <img id="previewImage" alt="Captured Image">
+            <div id="puzzleBoard" class="puzzle-board"></div>
+        </div>
+
+
+
+        <!-- Controls -->
+        <div class="controls">
+
+            <button id="openCameraBtn">
+                📷 Open Camera
+            </button>
+
+            <div id="cameraSelectContainer" class="camera-select-container" style="display: none;">
+                <select id="cameraSelect" class="camera-select">
+                    <option value="">Default Camera</option>
+                </select>
+            </div>
+
+            <button id="captureBtn">
+                📸 Capture
+            </button>
+
+            <button id="retakeBtn">
+                🔄 Retake
+            </button>
+
+            <label class="upload-btn">
+                🖼 Upload Image
+                <input type="file" id="imageUpload" accept="image/*">
+            </label>
+
+        </div>
+
+        <!-- Grid Selection -->
+        <div class="settings-card">
+
+            <h3>GRID SIZE</h3>
+
+            <div class="grid-buttons">
+
+                <button class="grid-btn active" data-grid="3">
+                    3x3
+                    <span>Easy</span>
+                </button>
+
+                <button class="grid-btn" data-grid="4">
+                    4x4
+                    <span>Medium</span>
+                </button>
+
+                <button class="grid-btn" data-grid="5">
+                    5x5
+                    <span>Hard</span>
+                </button>
+
+                <button class="grid-btn" data-grid="6">
+                    6x6
+                    <span>Expert</span>
+                </button>
+
+            </div>
+
+            <!-- Options -->
+            <div class="options">
+
+                <div class="option-item">
+                    <input type="checkbox" id="showNumbers">
+                    <label for="showNumbers">Show Numbers</label>
+                </div>
+
+                <div class="option-item">
+                    <input type="checkbox" id="soundEffects">
+                    <label for="soundEffects">Sound Effects</label>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Start + Auto Solve -->
+        <button id="startPuzzleBtn" class="start-btn">
+            🚀 Start Puzzle
+        </button>
+
+        <button id="solveBtn" class="auto-solve-btn">
+            🤖 Auto Solve
+        </button>
+
+        <!-- Stats -->
+        <div class="stats">
+
+            <div class="stat-box">
+                ⏱ Time: <span id="timer">00:00</span>
+            </div>
+
+            <div class="stat-box">
+                🔄 Moves: <span id="moves">0</span>
+            </div>
+
+        </div>
+
+        <!-- Best Scores -->
+        <div class="score-card">
+
+            <h3>🏆 BEST SCORES</h3>
+
+            <div class="score-grid">
+
+                <div class="score-item">
+                    <h4>3x3 Grid</h4>
+                    <p id="best3">No Record</p>
+                </div>
+
+                <div class="score-item">
+                    <h4>4x4 Grid</h4>
+                    <p id="best4">No Record</p>
+                </div>
+
+                <div class="score-item">
+                    <h4>5x5 Grid</h4>
+                    <p id="best5">No Record</p>
+                </div>
+
+                <div class="score-item">
+                    <h4>6x6 Grid</h4>
+                    <p id="best6">No Record</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Result Modal -->
+    <div id="resultModal" class="result-modal">
+        <div class="result-card">
+            <div class="result-confetti" id="resultConfetti">🎉</div>
+            <h2 class="result-title" id="resultTitle">Puzzle Solved!</h2>
+            <p class="result-sub" id="resultSub">Amazing work! Here's how you did:</p>
+            <div class="result-stats">
+                <div class="result-stat">
+                    <span class="result-label">⏱ Time</span>
+                    <span id="resultTime" class="result-value">00:00</span>
+                </div>
+                <div class="result-stat">
+                    <span class="result-label">🔄 Moves</span>
+                    <span id="resultMoves" class="result-value">0</span>
+                </div>
+                <div class="result-stat">
+                    <span class="result-label">🏆 Best</span>
+                    <span id="resultBest" class="result-value">—</span>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button id="playAgainBtn" class="modal-btn replay-btn">🔁 Replay Grid</button>
+                <button id="continueBtn" class="modal-btn continue-btn">🎮 Keep Playing</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast" aria-live="polite" aria-atomic="true"></div>
+
+</body>
+
+</html>
